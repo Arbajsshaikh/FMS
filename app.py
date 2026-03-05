@@ -4,7 +4,10 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 import math
+import os
 
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 
 app = Flask(__name__)
 app.secret_key = "secret123"
