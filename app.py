@@ -10,8 +10,7 @@ import os
 
 app = Flask(__name__)
 app.secret_key = "secret123"
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -2336,4 +2335,5 @@ def test():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
