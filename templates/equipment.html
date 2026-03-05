@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="mb-4">🚜 Equipment Management</h3>
+
+<!-- ============================= -->
+<!-- ADD EQUIPMENT -->
+<!-- ============================= -->
+<div class="card mb-4">
+    <div class="card-header bg-white">
+        <h5>Add New Equipment</h5>
+    </div>
+
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('add_equipment') }}">
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Category</label>
+                    <select name="category" class="form-control">
+                        <option>Heavy Machinery</option>
+                        <option>Irrigation Equipment</option>
+                        <option>Crop Operation Equipment</option>
+                        <option>Transport Vehicles</option>
+                        <option>Small Tools</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Sub Category</label>
+                    <input type="text" name="sub_category" class="form-control" placeholder="Tractor / Harvester / Pump etc">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Purchase Date</label>
+                    <input type="date" name="purchase_date" class="form-control">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Purchase Cost</label>
+                    <input type="number" step="0.01" name="purchase_cost" class="form-control">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Vendor</label>
+                    <input type="text" name="vendor" class="form-control">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Status</label>
+                    <select name="status" class="form-control">
+                        <option>Active</option>
+                        <option>Under Maintenance</option>
+                        <option>Scrap</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button class="btn btn-success mt-3">Save Equipment</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- ============================= -->
+<!-- REGISTERED EQUIPMENTS -->
+<!-- ============================= -->
+<div class="card">
+    <div class="card-header bg-white">
+        <h5>Registered Equipment</h5>
+    </div>
+
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Sub Category</th>
+                    <th>Cost</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for eq in equipments %}
+                <tr>
+                    <td>{{ eq.name }}</td>
+                    <td>{{ eq.category }}</td>
+                    <td>{{ eq.sub_category }}</td>
+                    <td>{{ eq.purchase_cost }}</td>
+                    <td>{{ eq.status }}</td>
+
+                    <td>
+                        <a href="{{ url_for('delete_equipment', id=eq.equipment_id) }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure you want to delete this entry?')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">
+                        No equipment added yet.
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<hr>
+
+<h5>🔧 Add Maintenance</h5>
+
+<form method="POST" action="{{ url_for('add_maintenance') }}">
+    <div class="row">
+
+        <div class="col-md-3 mb-3">
+            <label>Equipment</label>
+            <input list="equipment_list" name="equipment_id" class="form-control" placeholder="Type or select equipment">
+
+                <datalist id="equipment_list">
+                    {% for eq in equipments %}
+                    <option value="{{ eq.equipment_id }}">{{ eq.name }}</option>
+                    {% endfor %}
+                </datalist>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label>Date</label>
+            <input type="date" name="maintenance_date" class="form-control">
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label>Cost</label>
+            <input type="number" step="0.01" name="cost" class="form-control">
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label>Description</label>
+            <input type="text" name="description" class="form-control">
+        </div>
+
+    </div>
+
+    <button class="btn btn-warning">Add Maintenance</button>
+</form>
+
+<hr>
+
+<h5>⛽ Add Fuel Log</h5>
+
+<form method="POST" action="{{ url_for('add_fuel') }}">
+    <div class="row">
+
+        <div class="col-md-3 mb-3">
+            <label>Equipment</label>
+           <input list="equipment_list2" name="equipment_id" class="form-control" placeholder="Type or select equipment">
+
+                <datalist id="equipment_list2">
+                    {% for eq in equipments %}
+                    <option value="{{ eq.equipment_id }}">{{ eq.name }}</option>
+                    {% endfor %}
+                </datalist>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label>Date</label>
+            <input type="date" name="date" class="form-control">
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label>Fuel Type</label>
+            <input type="text" name="fuel_type" class="form-control">
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <label>Cost</label>
+            <input type="number" step="0.01" name="cost" class="form-control">
+        </div>
+
+    </div>
+
+    <button class="btn btn-primary">Add Fuel</button>
+</form>
+
+<hr>
+<h5>📊 Fuel Cost Analytics</h5>
+
+<div style="width: 100%; max-width: 600px; height: 300px;">
+    <canvas id="fuelChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const fuelData = {
+    labels: {{ fuel_summary.keys()|list|tojson }},
+    datasets: [{
+        label: "Fuel Cost",
+        data: {{ fuel_summary.values()|list|tojson }},
+        backgroundColor: "#4e73df",
+        borderColor: "#4e73df",
+        borderWidth: 1
+    }]
+};
+
+new Chart(document.getElementById("fuelChart"), {
+    type: "bar",
+    data: fuelData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: "top"
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+</script>
+
+<h5>📅 Yearly Maintenance Summary</h5>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Year</th>
+            <th>Total Maintenance Cost</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for year, total in yearly_data.items() %}
+        <tr>
+            <td>{{ year }}</td>
+            <td>{{ total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

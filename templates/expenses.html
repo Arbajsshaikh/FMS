@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="mb-4">💰 Expense Management</h3>
+
+<!-- ================= ADD EXPENSE ================= -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('add_expense') }}">
+            <div class="row">
+
+                <!-- Date -->
+                <div class="col-md-3 mb-3">
+                    <label>Date</label>
+                    <input type="date" name="expense_date" class="form-control">
+                </div>
+
+                <!-- Main Category -->
+                <div class="col-md-3 mb-3">
+                    <label>Main Category</label>
+                    <select name="main_category" class="form-control" required>
+                        <option value="">Select Category</option>
+                        {% for cat in EXPENSE_MAIN_CATEGORIES %}
+                        <option value="{{ cat }}">{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Sub Category -->
+                <div class="col-md-3 mb-3">
+                    <label>Sub Category</label>
+                    <input type="text" name="sub_category" class="form-control">
+                </div>
+
+                <!-- Expense Type -->
+                <div class="col-md-3 mb-3">
+                    <label>Expense Type</label>
+                    <select name="expense_type" class="form-control">
+                        <option value="Fixed">Fixed</option>
+                        <option value="Variable">Variable</option>
+                    </select>
+                </div>
+
+                <!-- Quantity -->
+                <div class="col-md-3 mb-3">
+                    <label>Quantity</label>
+                    <input type="number" step="0.01" name="quantity" class="form-control">
+                </div>
+
+                <!-- Unit -->
+                <div class="col-md-3 mb-3">
+                    <label>Unit</label>
+                    <input type="text" name="unit" class="form-control">
+                </div>
+
+                <!-- Rate -->
+                <div class="col-md-3 mb-3">
+                    <label>Rate (₹)</label>
+                    <input type="number" step="0.01" name="rate" class="form-control">
+                </div>
+
+                <!-- Additional Cost -->
+                <div class="col-md-3 mb-3">
+                    <label>Additional Cost (₹)</label>
+                    <input type="number" step="0.01" name="additional_cost" class="form-control">
+                </div>
+
+                <!-- Supplier -->
+                <div class="col-md-4 mb-3">
+                    <label>Supplier / Vendor</label>
+                    <input type="text" name="supplier" class="form-control">
+                </div>
+
+                <!-- Description -->
+                <div class="col-md-8 mb-3">
+                    <label>Description</label>
+                    <input type="text" name="description" class="form-control">
+                </div>
+
+                <!-- Season -->
+                <div class="col-md-4 mb-3">
+                    <label>Season</label>
+
+                    <input list="season_list" name="season_id" class="form-control" placeholder="Type or select season">
+
+                    <datalist id="season_list">
+                        {% for season in seasons %}
+                        <option value="{{ season.season_id }}">{{ season.season_name }}</option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+
+                <!-- Land -->
+                <div class="col-md-4 mb-3">
+                    <label>Land</label>
+
+                    <input list="land_list" name="land_id" class="form-control" placeholder="Type or select land">
+
+                    <datalist id="land_list">
+                        {% for land in lands %}
+                        <option value="{{ land.land_id }}">{{ land.land_name }}</option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+
+                <!-- Crop -->
+                <div class="col-md-4 mb-3">
+                    <label>Crop</label>
+
+                    <input list="crop_list" name="crop_id" class="form-control" placeholder="Type or select crop">
+
+                    <datalist id="crop_list">
+                        {% for crop in crops %}
+                        <option value="{{ crop.crop_id }}">{{ crop.crop_name }}</option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+
+                <!-- Submit -->
+                <div class="col-md-12 text-end">
+                    <button class="btn btn-success">Add Expense</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ================= EXPENSE RECORDS ================= -->
+<div class="card mb-4">
+<div class="card-body">
+
+<h5 class="mb-3">📋 Expense Records</h5>
+
+<table class="table table-hover">
+<thead class="table-light">
+<tr>
+<th>Date</th>
+<th>Category</th>
+<th>Sub Category</th>
+<th>Quantity</th>
+<th>Rate</th>
+<th>Total</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for exp in expenses %}
+
+<tr>
+<td>{{ exp.expense_date }}</td>
+<td>{{ exp.main_category }}</td>
+<td>{{ exp.sub_category }}</td>
+<td>{{ exp.quantity }}</td>
+<td>{{ exp.rate }}</td>
+<td>{{ exp.total_amount }}</td>
+
+<td>
+<a href="{{ url_for('delete_expense_record', id=exp.expense_id) }}"
+class="btn btn-danger btn-sm"
+onclick="return confirm('Delete this expense?')">
+Delete
+</a>
+</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+<td colspan="7" class="text-center text-muted">
+No expenses recorded yet
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+
+</div>
+</div>
+
+<!-- ================= ANALYTICS ================= -->
+<div class="card">
+    <div class="card-body">
+
+        <h5 class="mb-3">📊 Expense Analytics</h5>
+
+        <h6>Total Expense: ₹ {{ total_expense or 0 }}</h6>
+
+        <hr>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <h6>Expense per Season</h6>
+                {% for k, v in expense_per_season.items() %}
+                <p>{{ k }} : ₹ {{ v }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-6">
+                <h6>Expense per Crop</h6>
+                {% for k, v in expense_per_crop.items() %}
+                <p>{{ k }} : ₹ {{ v }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-6">
+                <h6>Expense per Field</h6>
+                {% for k, v in expense_per_land.items() %}
+                <p>{{ k }} : ₹ {{ v }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-6">
+                <h6>Expense per Category</h6>
+                {% for k, v in expense_per_category.items() %}
+                <p>{{ k }} : ₹ {{ v }}</p>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <hr>
+
+        <h6>Fixed Cost: ₹ {{ fixed_cost or 0 }}</h6>
+        <h6>Variable Cost: ₹ {{ variable_cost or 0 }}</h6>
+
+    </div>
+</div>
+
+{% endblock %}

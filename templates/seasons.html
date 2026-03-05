@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>📅 Season Management</h3>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('add_season') }}">
+
+            <div class="row">
+
+                <div class="col-md-3 mb-3">
+                    <label>Season Name</label>
+                    <select name="season_name" class="form-control">
+                        <option>Kharif</option>
+                        <option>Rabi</option>
+                        <option>Zaid</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 mb-3">
+                    <label>Year</label>
+                    <input type="number" name="year" class="form-control">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label>Start Date</label>
+                    <input type="date" name="start_date" class="form-control">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label>End Date</label>
+                    <input type="date" name="end_date" class="form-control">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Select Crop</label>
+                    <select name="crop_id" class="form-control">
+                        {% for crop in crops %}
+                        <option value="{{ crop.crop_id }}">
+                            {{ crop.crop_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+
+            <button class="btn btn-success">Add Season</button>
+        </form>
+    </div>
+</div>
+
+<h5>All Seasons</h5>
+<table class="table table-bordered">
+    <tr>
+        <th>Season</th>
+        <th>Year</th>
+        <th>Crop</th>
+        <th>Start</th>
+        <th>End</th>
+    </tr>
+
+    {% for season in seasons %}
+    <tr>
+        <td>{{ season.season_name }}</td>
+        <td>{{ season.year }}</td>
+        <td>{{ season.crop.crop_name }}</td>
+        <td>{{ season.start_date }}</td>
+        <td>{{ season.end_date }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

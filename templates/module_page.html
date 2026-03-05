@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card text-center p-5">
+
+    <div class="mb-4">
+        <i class="bi {{ module_icon }}" style="font-size:60px;"></i>
+    </div>
+
+    <h2 class="mb-3">{{ module_name }} Module</h2>
+
+    <p class="text-muted">
+        This module is under development.  
+        You can start building features like Add, Edit, Delete and Reports here.
+    </p>
+
+    <div class="mt-4">
+        <button class="btn btn-primary">
+            Add {{ module_name }}
+        </button>
+    </div>
+
+</div>
+
+{% endblock %}

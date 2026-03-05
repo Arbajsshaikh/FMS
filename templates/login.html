@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FMS - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+
+            /* 🌾 Farming Background Image + Green Overlay */
+            background: linear-gradient(
+                rgba(144, 238, 144, 0.75),
+                rgba(152, 251, 152, 0.75)
+            ),
+            url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-card {
+            width: 400px;
+            padding: 40px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+
+            border: 2px solid #28a745;
+            box-shadow: 0 0 25px rgba(40, 167, 69, 0.5);
+
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .auth-card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2d6a4f;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.4);
+        }
+
+        .password-box {
+            display: flex;
+            margin-top: 5px;
+        }
+
+        .password-box input {
+            flex: 1;
+            border-radius: 12px 0 0 12px;
+        }
+
+        .password-box button {
+            border: 1px solid #ccc;
+            border-left: none;
+            background: #f1f1f1;
+            padding: 0 12px;
+            cursor: pointer;
+            border-radius: 0 12px 12px 0;
+            transition: 0.3s;
+        }
+
+        .password-box button:hover {
+            background: #d4edda;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .small-text {
+            text-align: center;
+            font-size: 13px;
+            margin-top: 18px;
+            color: gray;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-card">
+
+    <h2>Login</h2>
+
+    <form method="POST" action="{{ url_for('login') }}">
+
+        <div class="form-group">
+            <label>Email / Username</label>
+            <input type="text" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <div class="password-box">
+                <input type="password" name="password" id="loginPassword" required>
+                <button type="button" onclick="togglePassword()">👁</button>
+            </div>
+        </div>
+
+        <div class="options">
+            <label>
+                <input type="checkbox" name="remember"> Remember me
+            </label>
+            <a href="#">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Login
+        </button>
+
+    </form>
+
+    <div class="small-text">
+        Farmers Management System
+    </div>
+
+</div>
+
+<script>
+function togglePassword() {
+    var x = document.getElementById("loginPassword");
+    x.type = (x.type === "password") ? "text" : "password";
+}
+</script>
+
+</body>
+</html>

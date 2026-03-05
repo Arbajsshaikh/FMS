@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="mb-4">Inventory Module</h2>
+
+    <!-- ================= ADD INVENTORY ITEM ================= -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            Add Inventory Item
+        </div>
+        <div class="card-body">
+
+            <form method="POST" action="/add_inventory_item">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <input type="text" name="item_name" class="form-control" placeholder="Item Name" required>
+                    </div>
+
+                    <div class="col-md-2">
+                        <select name="category" class="form-control">
+                            <option>Seed</option>
+                            <option>Fertilizer</option>
+                            <option>Chemical</option>
+                            <option>Fuel</option>
+                            <option>Tool</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <input type="text" name="unit" class="form-control" placeholder="Unit (kg/ltr)" required>
+                    </div>
+
+                    <div class="col-md-2">
+                        <input type="number" step="0.01" name="purchase_price" class="form-control" placeholder="Purchase Price">
+                    </div>
+
+                    <div class="col-md-1">
+                        <input type="number" step="0.01" name="min_stock_level" class="form-control" placeholder="Min">
+                    </div>
+
+                    <div class="col-md-2">
+                        <button class="btn btn-success w-100">Add Item</button>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="text-end mt-3">
+    <button type="submit" class="btn btn-success">
+        Save
+    </button>
+
+    <button type="reset" class="btn btn-secondary">
+        Clear
+    </button>
+</div>
+
+
+    <!-- ================= LOW STOCK ALERT ================= -->
+    {% if low_stock %}
+    <div class="alert alert-danger">
+        <strong>⚠ Low Stock Alert:</strong>
+        {% for item in low_stock %}
+            {{ item.item_name }} ({{ item.current_stock }}){% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+    <!-- ================= INVENTORY LIST ================= -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            All Inventory Items
+        </div>
+        <div class="card-body table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Item</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Unit</th>
+                        <th>Min Level</th>
+                        <th>Warehouse</th>
+                        <th>Barcode</th>
+                        <th>QR Code</th>
+                        <th width="200">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                    <tr {% if item.current_stock <= item.min_stock_level %} class="table-danger" {% endif %}>
+                        <td>{{ item.item_name }}</td>
+                        <td>{{ item.category }}</td>
+                        <td><strong>{{ item.current_stock }}</strong></td>
+                        <td>{{ item.unit }}</td>
+                        <td>{{ item.min_stock_level }}</td>
+
+                        <!-- Warehouse -->
+                        <td>
+                            {% if item.warehouse_id %}
+                                {{ item.warehouse_id }}
+                            {% else %}
+                                Not Assigned
+                            {% endif %}
+                        </td>
+
+                        <!-- Barcode -->
+                        <td>
+                            <small>{{ item.barcode }}</small>
+                        </td>
+
+                        <!-- QR Code -->
+                        <td>
+                            {% if item.qr_code %}
+                                <img src="{{ url_for('static', filename='qrcodes/' + item.qr_code) }}"
+                                     width="60" class="img-thumbnail">
+
+
+                            <td>
+                                <a href="{{ url_for('delete_module_name', id=item.id) }}"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Are you sure you want to delete this entry?')">
+                                    Delete
+                                </a>
+                            </td>
+
+                            {% else %}
+                                <span class="text-muted">Not Generated</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Actions -->
+                        <td>
+
+                            <form method="POST"
+                                  action="/stock_in/{{ item.inventory_id }}"
+                                  class="d-inline">
+                                <input type="number"
+                                       name="quantity"
+                                       step="0.01"
+                                       placeholder="Qty"
+                                       class="form-control form-control-sm mb-1"
+                                       required>
+                                <button class="btn btn-sm btn-success w-100">Stock IN</button>
+                            </form>
+
+                            <form method="POST"
+                                  action="/stock_out/{{ item.inventory_id }}"
+                                  class="d-inline mt-1">
+                                <input type="number"
+                                       name="quantity"
+                                       step="0.01"
+                                       placeholder="Qty"
+                                       class="form-control form-control-sm mb-1"
+                                       required>
+                                <button class="btn btn-sm btn-danger w-100">Stock OUT</button>
+                            </form>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

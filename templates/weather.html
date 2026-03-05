@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container-fluid">
+
+<h2 class="mb-4">🌦 Weather Dashboard</h2>
+
+<!-- ================= WEATHER INPUT FORM ================= -->
+<div class="card p-4 mb-4">
+<h5>Add Weather Data</h5>
+
+<form method="POST" action="/add_weather">
+<div class="row">
+
+<div class="col-md-3">
+<label>Temperature (°C)</label>
+<input type="number" step="0.1" name="temperature" class="form-control" required>
+</div>
+
+<div class="col-md-3">
+<label>Humidity (%)</label>
+<input type="number" name="humidity" class="form-control" required>
+</div>
+
+<div class="col-md-3">
+<label>Rainfall (mm)</label>
+<input type="number" step="0.1" name="rainfall" class="form-control" required>
+</div>
+
+<div class="col-md-3">
+<label>Wind Speed (km/h)</label>
+<input type="number" step="0.1" name="wind_speed" class="form-control" required>
+</div>
+
+<div class="col-md-3 mt-3">
+<label>Cloud Cover (%)</label>
+<input type="number" name="cloud_cover" class="form-control">
+</div>
+
+<div class="col-md-3 mt-3">
+<label>UV Index</label>
+<input type="number" name="uv_index" class="form-control">
+</div>
+
+<div class="col-md-6 mt-4 d-flex align-items-end">
+<button class="btn btn-success w-100">
+Save Weather Data
+</button>
+</div>
+
+</div>
+</form>
+</div>
+
+
+<!-- ================= CURRENT WEATHER ================= -->
+<div class="row">
+
+<div class="col-md-2 card p-3 m-2">
+<h6>Temperature</h6>
+<h4>{{ current.temperature if current else 0 }}°C</h4>
+</div>
+
+<div class="col-md-2 card p-3 m-2">
+<h6>Humidity</h6>
+<h4>{{ current.humidity if current else 0 }}%</h4>
+</div>
+
+<div class="col-md-2 card p-3 m-2">
+<h6>Rainfall Today</h6>
+<h4>{{ current.rainfall if current else 0 }} mm</h4>
+</div>
+
+<div class="col-md-2 card p-3 m-2">
+<h6>Wind Speed</h6>
+<h4>{{ current.wind_speed if current else 0 }} km/h</h4>
+</div>
+
+<div class="col-md-2 card p-3 m-2">
+<h6>Cloud Cover</h6>
+<h4>{{ current.cloud_cover if current else 0 }}%</h4>
+</div>
+
+<div class="col-md-2 card p-3 m-2">
+<h6>UV Index</h6>
+<h4>{{ current.uv_index if current else 0 }}</h4>
+</div>
+
+</div>
+
+
+<!-- ================= FORECAST ================= -->
+
+<div class="card p-3 mt-4">
+<h5>Add Forecast</h5>
+
+<form method="POST" action="/add_forecast">
+
+<input type="date" name="forecast_date" required>
+<input type="number" step="0.1" name="temperature_min" placeholder="Min Temp" required>
+<input type="number" step="0.1" name="temperature_max" placeholder="Max Temp" required>
+<input type="number" step="0.1" name="rainfall_prediction" placeholder="Rainfall" required>
+<input type="number" step="0.1" name="wind_speed" placeholder="Wind" required>
+
+<label>
+<input type="checkbox" name="storm_warning"> Storm Warning
+</label>
+
+<button class="btn btn-primary">Save Forecast</button>
+
+</form>
+</div>
+
+
+<div class="card mt-4">
+
+<div class="card-header bg-primary text-white">
+7–10 Day Forecast
+</div>
+
+<div class="card-body">
+
+<table class="table table-bordered">
+
+<thead>
+<tr>
+<th>Date</th>
+<th>Min Temp</th>
+<th>Max Temp</th>
+<th>Rain</th>
+<th>Wind</th>
+<th>Storm</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% if forecast %}
+
+{% for day in forecast %}
+
+<tr>
+
+<td>{{ day.forecast_date }}</td>
+<td>{{ day.temperature_min }}°C</td>
+<td>{{ day.temperature_max }}°C</td>
+<td>{{ day.rainfall_prediction }} mm</td>
+<td>{{ day.wind_speed }} km/h</td>
+<td>{{ "⚠ Yes" if day.storm_warning else "No" }}</td>
+
+<td>
+<a href="{{ url_for('delete_forecast', id=day.id) }}"
+class="btn btn-danger btn-sm"
+onclick="return confirm('Are you sure you want to delete this entry?')">
+Delete
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+{% else %}
+
+<tr>
+<td colspan="7" class="text-center">No Forecast Data</td>
+</tr>
+
+{% endif %}
+
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+<!-- ================= RAINFALL LOG ================= -->
+
+<div class="card p-3 mt-4">
+<h5>Add Rainfall Record</h5>
+
+<form method="POST" action="/add_rainfall">
+
+<input type="date" name="date" required>
+<input type="number" step="0.1" name="rainfall_mm" placeholder="Rainfall (mm)" required>
+<input type="text" name="location" placeholder="Location" required>
+
+<button class="btn btn-success">Save Rainfall</button>
+
+</form>
+</div>
+
+
+<div class="card mt-4">
+
+<div class="card-header bg-success text-white">
+Rainfall Monitoring
+</div>
+
+<div class="card-body">
+
+<table class="table table-bordered">
+
+<thead>
+<tr>
+<th>Date</th>
+<th>Rainfall (mm)</th>
+<th>Location</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% if rainfall_logs %}
+
+{% for rain in rainfall_logs %}
+
+<tr>
+<td>{{ rain.date }}</td>
+<td>{{ rain.rainfall_mm }}</td>
+<td>{{ rain.location }}</td>
+</tr>
+
+{% endfor %}
+
+{% else %}
+
+<tr>
+<td colspan="3" class="text-center">
+No Rainfall Records
+</td>
+</tr>
+
+{% endif %}
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+</div>
+
+{% endblock %}

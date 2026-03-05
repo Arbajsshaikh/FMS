@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FMS - Authentication</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+
+            /* 🌿 Light Farming Green Background */
+            background: linear-gradient(
+                rgba(144, 238, 144, 0.6),
+                rgba(152, 251, 152, 0.6)
+            ),
+            url("https://images.unsplash.com/photo-1500382017468-9049fed747ef");
+
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-card {
+            width: 400px;
+            padding: 40px;
+            border-radius: 20px;
+            background: white;
+
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid #28a745;
+            box-shadow: 0 0 20px rgba(40,167,69,0.4);
+
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .auth-card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #28a745;
+            color: #28a745;
+            margin-top: 10px;
+        }
+
+        .btn-outline:hover {
+            background: #28a745;
+            color: white;
+        }
+
+        .small-text {
+            text-align: center;
+            font-size: 13px;
+            margin-top: 15px;
+            color: gray;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+<body>
+
+    {% block content %}{% endblock %}
+
+</body>
+</html>

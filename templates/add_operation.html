@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Add Operation</h2>
+
+<form method="POST">
+
+    <!-- Category -->
+    <label>Category:</label>
+    <select name="category_id" required>
+        {% for category in categories %}
+            <option value="{{ category[0] }}">{{ category[1] }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <!-- Season (Typing Enabled) -->
+    <label>Season:</label>
+    <input type="text" name="season" placeholder="Enter Season" required>
+    <br><br>
+
+    <!-- Operation Name -->
+    <label>Operation Name:</label>
+    <input type="text" name="operation_name" required>
+    <br><br>
+
+    <!-- Date -->
+    <label>Date:</label>
+    <input type="date" name="operation_date" required>
+    <br><br>
+
+    <!-- Description -->
+    <label>Description:</label>
+    <input type="text" name="description">
+    <br><br>
+
+    <!-- Weather -->
+    <label>Weather:</label>
+    <input type="text" name="weather">
+    <br><br>
+
+    <!-- Notes -->
+    <label>Notes:</label>
+    <input type="text" name="notes">
+    <br><br>
+
+    <!-- Total Cost -->
+    <label>Total Cost:</label>
+    <input type="number" step="0.01" name="total_cost">
+    <br><br>
+
+    <button type="submit">Save Operation</button>
+
+</form>
+
+{% endblock %}

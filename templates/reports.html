@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="mb-4">📊 Smart ERP Reports Dashboard</h3>
+
+<!-- ================= FINANCIAL REPORT ================= -->
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h6>Total Income</h6>
+            <h4>₹ {{ total_income or 0 }}</h4>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h6>Total Expense</h6>
+            <h4>₹ {{ total_expense or 0 }}</h4>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3 bg-light">
+            <h6>Net Profit</h6>
+            <h4>₹ {{ net_profit or 0 }}</h4>
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+<!-- ================= CROP PERFORMANCE ================= -->
+<div class="card p-3 mt-3">
+    <h5>🌾 Crop Performance</h5>
+    <p><strong>Yield per Acre:</strong> {{ yield_per_acre or 0 }} kg</p>
+</div>
+
+<hr>
+
+<!-- ================= LOAN REPORT ================= -->
+<div class="card p-3 mt-3">
+    <h5>🏦 Loan & EMI Report</h5>
+    <p><strong>Total Loan Outstanding:</strong> ₹ {{ total_loan_outstanding or 0 }}</p>
+</div>
+
+<hr>
+
+<!-- ================= INVENTORY REPORT ================= -->
+<div class="card p-3 mt-3">
+    <h5>📦 Inventory Report</h5>
+    <p><strong>Total Stock Value:</strong> ₹ {{ stock_value or 0 }}</p>
+</div>
+
+<hr>
+
+<!-- ================= WEATHER REPORT ================= -->
+<div class="card p-3 mt-3">
+    <h5>🌦 Weather & Risk Report</h5>
+    <p><strong>Total Rainfall Logged:</strong> {{ total_rainfall or 0 }} mm</p>
+</div>
+
+{% endblock %}

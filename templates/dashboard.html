@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+
+.dashboard-title{
+    font-weight:600;
+    margin-bottom:25px;
+}
+
+.chart-card{
+    background:white;
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.chart-box{
+    height:220px;
+}
+
+</style>
+
+<h3 class="dashboard-title">📊 Smart Farm Dashboard</h3>
+
+<!-- ROW 1 -->
+<div class="row">
+
+<div class="col-md-4 mb-4">
+<div class="chart-card">
+<h6>🌾 Crop Distribution</h6>
+<div class="chart-box">
+<canvas id="cropChart"></canvas>
+</div>
+</div>
+</div>
+
+<div class="col-md-4 mb-4">
+<div class="chart-card">
+<h6>🗺 Land Usage</h6>
+<div class="chart-box">
+<canvas id="landChart"></canvas>
+</div>
+</div>
+</div>
+
+<div class="col-md-4 mb-4">
+<div class="chart-card">
+<h6>👷 Workers Distribution</h6>
+<div class="chart-box">
+<canvas id="workerChart"></canvas>
+</div>
+</div>
+</div>
+
+</div>
+
+
+<!-- ROW 2 -->
+<div class="row">
+
+<div class="col-md-4 mb-4">
+<div class="chart-card">
+<h6>🚜 Equipment Status</h6>
+<div class="chart-box">
+<canvas id="equipmentChart"></canvas>
+</div>
+</div>
+</div>
+
+<div class="col-md-4 mb-4">
+<div class="chart-card">
+<h6>📦 Inventory Category</h6>
+<div class="chart-box">
+<canvas id="inventoryChart"></canvas>
+</div>
+</div>
+</div>
+
+<div class="col-md-4 mb-4">
+<div class="chart-card">
+<h6>💰 Loans Status</h6>
+<div class="chart-box">
+<canvas id="loanChart"></canvas>
+</div>
+</div>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const colors = {
+green:"#81C784",
+lightGreen:"#A5D6A7",
+yellow:"#FFE082",
+orange:"#FFB74D",
+blue:"#64B5F6",
+purple:"#BA68C8",
+red:"#E57373",
+gray:"#B0BEC5"
+};
+
+//////////////////////////////////////////////////
+// Crop Distribution (Doughnut)
+//////////////////////////////////////////////////
+
+new Chart(document.getElementById("cropChart"),{
+type:"doughnut",
+data:{
+labels:["Rice","Wheat","Maize","Cotton"],
+datasets:[{
+data:[12,8,6,5],
+backgroundColor:[
+colors.green,
+colors.lightGreen,
+colors.yellow,
+colors.orange
+]
+}]
+},
+options:{maintainAspectRatio:false}
+});
+
+
+//////////////////////////////////////////////////
+// Land Usage (Polar Area)
+//////////////////////////////////////////////////
+
+new Chart(document.getElementById("landChart"),{
+type:"polarArea",
+data:{
+labels:["Cultivated","Unused","Preparation"],
+datasets:[{
+data:[60,20,10],
+backgroundColor:[
+colors.green,
+colors.yellow,
+colors.red
+]
+}]
+},
+options:{maintainAspectRatio:false}
+});
+
+
+//////////////////////////////////////////////////
+// Workers Distribution (Horizontal Bar)
+//////////////////////////////////////////////////
+
+new Chart(document.getElementById("workerChart"),{
+type:"bar",
+data:{
+labels:["Field Workers","Machine Operators","Supervisors"],
+datasets:[{
+label:"Workers",
+data:[10,4,2],
+backgroundColor:[
+colors.blue,
+colors.purple,
+colors.gray
+]
+}]
+},
+options:{
+maintainAspectRatio:false,
+indexAxis:'y'
+}
+});
+
+
+//////////////////////////////////////////////////
+// Equipment Status (Pie)
+//////////////////////////////////////////////////
+
+new Chart(document.getElementById("equipmentChart"),{
+type:"pie",
+data:{
+labels:["Available","In Use","Maintenance"],
+datasets:[{
+data:[5,3,1],
+backgroundColor:[
+colors.green,
+colors.orange,
+colors.red
+]
+}]
+},
+options:{maintainAspectRatio:false}
+});
+
+
+//////////////////////////////////////////////////
+// Inventory Category (Bar)
+//////////////////////////////////////////////////
+
+new Chart(document.getElementById("inventoryChart"),{
+type:"bar",
+data:{
+labels:["Seeds","Fertilizer","Pesticides","Tools"],
+datasets:[{
+label:"Items",
+data:[20,35,15,10],
+backgroundColor:[
+colors.lightGreen,
+colors.yellow,
+colors.orange,
+colors.gray
+]
+}]
+},
+options:{maintainAspectRatio:false}
+});
+
+
+//////////////////////////////////////////////////
+// Loan Status (Doughnut)
+//////////////////////////////////////////////////
+
+new Chart(document.getElementById("loanChart"),{
+type:"doughnut",
+data:{
+labels:["Paid","Remaining"],
+datasets:[{
+data:[40000,60000],
+backgroundColor:[
+colors.green,
+colors.red
+]
+}]
+},
+options:{maintainAspectRatio:false}
+});
+
+</script>
+
+{% endblock %}

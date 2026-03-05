@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>🌾 Crop Management</h3>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('add_crop') }}">
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+                    <label>Crop Name</label>
+                    <input type="text" name="crop_name" class="form-control" required>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Variety</label>
+                    <input type="text" name="variety" class="form-control">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Duration (Days)</label>
+                    <input type="number" name="duration_days" class="form-control">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Expected Yield</label>
+                    <input type="number" step="0.01" name="expected_yield" class="form-control">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Crop Type</label>
+                    <input type="text" name="crop_type" class="form-control">
+                </div>
+
+            </div>
+
+            <!-- Save + Clear Buttons -->
+            <div class="text-end">
+                <button type="submit" class="btn btn-success">
+                    Save
+                </button>
+
+                <button type="reset" class="btn btn-secondary">
+                    Clear
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<h5>Registered Crops</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Variety</th>
+            <th>Duration</th>
+            <th>Yield</th>
+            <th>Type</th>
+            <th>Action</th> <!-- NEW COLUMN -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for crop in crops %}
+        <tr>
+            <td>{{ crop.crop_name }}</td>
+            <td>{{ crop.variety }}</td>
+            <td>{{ crop.duration_days }}</td>
+            <td>{{ crop.expected_yield }}</td>
+            <td>{{ crop.crop_type }}</td>
+
+            <!-- Delete Button -->
+            <td>
+                <a href="{{ url_for('delete_crop', id=crop.crop_id) }}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to delete this crop?')">
+                   Delete
+                </a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6" class="text-center text-muted">
+                No crops added yet.
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="/seasons" class="btn btn-primary mt-3">Manage Seasons</a>
+
+{% endblock %}

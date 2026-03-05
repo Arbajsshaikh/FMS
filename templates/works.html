@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Works Module</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+
+        <form method="POST" action="{{ url_for('add_work') }}">
+
+            <!-- WORK CATEGORY + STAGE DROPDOWN -->
+            <label>Select Work</label>
+            <select name="work_title" id="work_title" class="form-control mb-3" required onchange="handleSelection()">
+                <option value="">Select Work Category</option>
+            </select>
+
+            <!-- Hidden fields -->
+            <input type="hidden" name="category" id="hidden_category">
+            <input type="hidden" name="stage" id="hidden_stage">
+
+            <!-- Season -->
+            <input name="season" placeholder="Season" class="form-control mb-2" required>
+
+            <!-- Crop -->
+            <input name="crop" placeholder="Crop" class="form-control mb-2" required>
+
+            <!-- Dates -->
+            <input type="date" name="start_date" class="form-control mb-2" required>
+            <input type="date" name="end_date" class="form-control mb-2">
+
+            <!-- Status -->
+            <select name="status" class="form-control mb-2">
+                <option value="Planned">Planned</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Completed">Completed</option>
+            </select>
+
+            <!-- Priority -->
+            <select name="priority" class="form-control mb-2">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+
+            <!-- Notes -->
+            <textarea name="notes" class="form-control mb-3" placeholder="Notes"></textarea>
+
+            <!-- Buttons -->
+            <div class="text-end">
+                <button type="submit" class="btn btn-success">Save</button>
+                <button type="reset" class="btn btn-secondary">Clear</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<hr>
+
+<h4>All Works</h4>
+
+{% for w in works %}
+<div class="card mb-3">
+    <div class="card-body">
+
+        <h5>{{ w.category }} - {{ w.stage }}</h5>
+
+        <p><strong>Status:</strong> {{ w.status }}</p>
+        <p><strong>Priority:</strong> {{ w.priority }}</p>
+        <p><strong>Total Cost:</strong> ₹{{ w.total_cost }}</p>
+
+        <a href="{{ url_for('delete_work', id=w.id) }}"
+           class="btn btn-danger btn-sm"
+           onclick="return confirm('Are you sure you want to delete this entry?')">
+            Delete
+        </a>
+
+    </div>
+</div>
+{% endfor %}
+
+<!-- ================== DYNAMIC SCRIPT ================== -->
+<script>
+
+var workData = {
+    "Land Preparation": ["Land Cleaning","Ploughing","Harrowing","Levelling","Bed Preparation"],
+    "Sowing / Planting": ["Seed Treatment","Direct Sowing","Transplanting","Gap Filling"],
+    "Irrigation": ["Drip Irrigation","Flood Irrigation","Sprinkler Irrigation"],
+    "Fertilizer Application": ["Basal Application","Top Dressing","Foliar Spray"],
+    "Pesticide Spraying": ["Insecticide Spray","Fungicide Spray","Herbicide Spray"],
+    "Harvesting": ["Manual Harvest","Machine Harvest","Threshing"]
+};
+
+var selectBox = document.getElementById("work_title");
+
+function loadCategories() {
+    selectBox.innerHTML = "<option value=''>Select Work Category</option>";
+
+    for (var category in workData) {
+        var option = document.createElement("option");
+        option.value = category;
+        option.text = category;
+        selectBox.appendChild(option);
+    }
+
+    document.getElementById("hidden_category").value = "";
+    document.getElementById("hidden_stage").value = "";
+}
+
+loadCategories();
+
+function handleSelection() {
+
+    var selected = selectBox.value;
+
+    if (workData[selected]) {
+
+        selectBox.innerHTML = "";
+
+        var backOption = document.createElement("option");
+        backOption.value = "BACK";
+        backOption.text = "⬅ Back to Categories";
+        selectBox.appendChild(backOption);
+
+        workData[selected].forEach(function(sub) {
+            var option = document.createElement("option");
+            option.value = selected + "||" + sub;
+            option.text = sub;
+            selectBox.appendChild(option);
+        });
+
+    }
+    else if (selected === "BACK") {
+        loadCategories();
+    }
+    else if (selected.includes("||")) {
+
+        var parts = selected.split("||");
+        document.getElementById("hidden_category").value = parts[0];
+        document.getElementById("hidden_stage").value = parts[1];
+    }
+}
+
+</script>
+
+{% endblock %}
